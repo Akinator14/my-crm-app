@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izmena podataka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+	    margin-top:300px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form-group label {
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group .half {
+            width: 48%;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Izmena podataka</h2>
+        <form id="updateClientForm">
+            <div class="form-group">
+                <label for="име">Име:</label>
+                <input type="text" id="име" required class="half">
+                
+                <label for="презиме">Презиме:</label>
+                <input type="text" id="презиме" required class="half">
+            </div>
+
+            <div class="form-group">
+                <label for="датумРођења">Датум рођења:</label>
+                <input type="date" id="датумРођења" required class="half">
+
+                <label for="местоРођења">Место рођења:</label>
+                <input type="text" id="местоРођења" required class="half">
+            </div>
+
+            <div class="form-group">
+                <label for="јмбг">ЈМБГ:</label>
+                <input type="text" id="јмбг" required>
+            </div>
+
+            <div class="form-group">
+                <label for="адресаБоравка">Адреса боравка:</label>
+                <input type="text" id="адресаБоравка" required>
+            </div>
+
+            <div class="form-group">
+                <label for="местоБоравка">Место пребивалишта:</label>
+                <input type="text" id="местоБоравка" required class="half">
+
+                <label for="општина">Општина:</label>
+                <input type="text" id="општина" required class="half">
+            </div>
+
+            <div class="form-group">
+                <label for="поштанскиБрој">Поштански број:</label>
+                <input type="text" id="поштанскиБрој" required class="half">
+
+                <label for="деловодниБрој">Деловодни број:</label>
+                <input type="text" id="деловодниБрој" required class="half">
+            </div>
+
+            <div class="form-group">
+                <label for="серијскиБрој">Серијски број:</label>
+                <input type="text" id="серијскиБрој" required class="half">
+
+                <label for="бројЛК">Број Л.К.:</label>
+                <input type="text" id="бројЛК" required class="half">
+            </div>
+
+            <div class="form-group">
+                <label for="епошта">Е-пошта:</label>
+                <input type="text" id="епошта" required>
+            </div>
+
+            <div class="form-group">
+                <label for="телефон">Телефон:</label>
+                <input type="text" id="телефон" required>
+            </div>
+
+            <div class="form-group">
+                <label for="датумПодношењаЗахтева">Датум подношења захтева:</label>
+                <input type="date" id="датумПодношењаЗахтева" required>
+            </div>
+
+            <button type="submit">Sačuvaj izmene</button>
+        </form>
+    </div>
+
+</body>
+</html>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCuVIHvTSt92dd7OzNVsq6qaWjRq3-s4vo",
+            authDomain: "crm-app-dd780.firebaseapp.com",
+            projectId: "crm-app-dd780",
+            storageBucket: "crm-app-dd780.appspot.com",
+            messagingSenderId: "843950811494",
+            appId: "1:843950811494:web:d6f9edbbc2eed70a8900a7",
+            measurementId: "G-2Z2LWB6QPT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Funkcija za formatiranje datuma za <input type="date">
+        function formatDateForInput(dateString) {
+            if (!dateString) return "";
+            const parts = dateString.split(".");
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            }
+            return dateString;
+        }
+
+        // Funkcija za formatiranje datuma pre slanja u Firebase
+        function formatDateForFirestore(dateString) {
+            if (!dateString) return "";
+            const parts = dateString.split("-");
+            if (parts.length === 3) {
+                return `${parts[2]}.${parts[1]}.${parts[0]}`;
+            }
+            return dateString;
+        }
+
+        // Popunjavanje forme podacima iz sessionStorage
+        document.getElementById("име").value = sessionStorage.getItem("име") || "";
+        document.getElementById("презиме").value = sessionStorage.getItem("презиме") || "";
+        document.getElementById("датумРођења").value = formatDateForInput(sessionStorage.getItem("датумРођења"));
+        document.getElementById("местоРођења").value = sessionStorage.getItem("местоРођења") || "";
+        document.getElementById("јмбг").value = sessionStorage.getItem("јмбг") || "";
+        document.getElementById("адресаБоравка").value = sessionStorage.getItem("адресаБоравка") || "";
+        document.getElementById("местоБоравка").value = sessionStorage.getItem("местоБоравка") || "";
+        document.getElementById("општина").value = sessionStorage.getItem("општина") || "";
+        document.getElementById("поштанскиБрој").value = sessionStorage.getItem("поштанскиБрој") || "";
+        document.getElementById("деловодниБрој").value = sessionStorage.getItem("деловодниБрој") || "";
+        document.getElementById("серијскиБрој").value = sessionStorage.getItem("серијскиБрој") || "";
+        document.getElementById("бројЛК").value = sessionStorage.getItem("бројЛК") || "";
+        document.getElementById("епошта").value = sessionStorage.getItem("епошта") || "";
+        document.getElementById("телефон").value = sessionStorage.getItem("телефон") || "";
+        document.getElementById("датумПодношењаЗахтева").value = formatDateForInput(sessionStorage.getItem("датумПодношењаЗахтева"));
+
+        // Ažuriranje podataka u Firestore
+        document.getElementById("updateClientForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const clientId = sessionStorage.getItem("clientId");
+
+            if (!clientId) {
+                alert("Greška: ID klijenta nije pronađen.");
+                return;
+            }
+
+            try {
+                await updateDoc(doc(db, "clients", clientId), {
+                    name: document.getElementById("име").value,
+                    surname: document.getElementById("презиме").value,
+                    dateb: formatDateForFirestore(document.getElementById("датумРођења").value),
+                    place: document.getElementById("местоРођења").value,
+                    jmbg: document.getElementById("јмбг").value,
+                    adress: document.getElementById("адресаБоравка").value,
+                    placea: document.getElementById("местоБоравка").value,
+                    city: document.getElementById("општина").value,
+                    post: document.getElementById("поштанскиБрој").value,
+                    dnum: document.getElementById("деловодниБрој").value,
+                    snum: document.getElementById("серијскиБрој").value,
+                    lnum: document.getElementById("бројЛК").value,
+                    email: document.getElementById("епошта").value,
+                    phone: document.getElementById("телефон").value,
+                    datez: formatDateForFirestore(document.getElementById("датумПодношењаЗахтева").value)
+                });
+
+                alert("Podaci su uspešno ažurirani!");
+                window.location.href = "../index.html"; // Vraćanje na početnu stranicu
+            } catch (error) {
+                console.error("Greška pri ažuriranju podataka:", error);
+                alert("Došlo je do greške pri ažuriranju podataka.");
+            }
+        });
+    </script>
+</body>
+</html>

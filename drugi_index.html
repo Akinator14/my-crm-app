@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahtev</title>
+    <style>
+        /* Stilizovanje slika */
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Smanjen razmak između slika */
+            margin-left: 200px;
+            margin-right: 0px;
+        }
+        
+        img {
+            width: 650px; /* Manje slike */
+        }
+
+        .info-container-del {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 30px;
+            margin-left: -220px;
+            margin-right: 0px;
+        }
+
+        .info-item-del {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 220px;
+        }
+
+        .info-label-del {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-del {
+            width: 50%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+        .info-container-ser {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: -75px;
+            margin-left: 250px;
+            margin-right: 0px;
+        }
+
+        .info-item-ser {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 220px;
+        }
+
+        .info-label-ser {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-ser {
+            width: 50%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+        .info-container-ime {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 20px;
+            margin-left: 190px;
+            margin-right: 0px;
+        }
+
+        .info-item-ime {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: -125px;
+        }
+
+        .info-label-ime {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-ime {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+        .info-container-prezime {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 20px;
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+
+        .info-item-prezime {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-prezime {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-prezime {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+        .info-container-adresa {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 20px;
+            margin-left: -200px;
+            margin-right: 0px;
+        }
+
+        .info-item-adresa {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-adresa {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-adresa {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-mesto {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: -75px;
+            margin-left: 200px;
+            margin-right: 0px;
+        }
+
+        .info-item-mesto {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-mesto {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-mesto {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-datumr {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 20px;
+            margin-left: -200px;
+            margin-right: 0px;
+        }
+
+        .info-item-datumr {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-datumr {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-datumr {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-mestor {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: -75px;
+            margin-left: 200px;
+            margin-right: 0px;
+        }
+
+        .info-item-mestor {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-mestor {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-mestor {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-jmbg {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 20px;
+            margin-left: -200px;
+            margin-right: 0px;
+        }
+
+        .info-item-jmbg {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-jmbg {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-jmbg {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-telefon {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: -75px;
+            margin-left: 200px;
+            margin-right: 0px;
+        }
+
+        .info-item-telefon {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-telefon {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-telefon {
+            width: 70%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-datump {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: 200px;
+            margin-left: -250px;
+            margin-right: 0px;
+        }
+
+        .info-item-datump {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-datump {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-datump {
+            width: 30%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        .info-container-potpis {
+            display: flex;
+            justify-content: center; /* Poravnanje u centru */
+            gap: 60px; /* Manji razmak između delovodnog i serijskog broja */
+            width: 800px; /* Smanjena širina */
+            margin-top: -75px;
+            margin-left: 240px;
+            margin-right: 0px;
+        }
+
+        .info-item-potpis {
+            display: flex;
+            font-size: 20px;
+    	    font-weight: bold;
+            flex-direction: column;
+            align-items: center;
+            width: 45%; /* Manja širina */
+            margin-left: 250px;
+        }
+
+        .info-label-potpis {
+            font-size: 16px; /* Manji font */
+    	    font-weight: normal;
+            margin-bottom: 10px; /* Manji razmak */
+        }
+
+        .info-line-potpis {
+            width: 30%;
+            border: none;
+            border-top: 1px solid #000;
+            margin-top: 10px; /* Manji razmak */
+        }
+
+        /* Stil za dugme Štampaj */
+        .print-button {
+            position: absolute;
+            top: 50px; /* Razdaljina od vrha */
+            left: 50px; /* Razdaljina od leve ivice */
+            padding: 10px 25px; /* Manje dugme */
+            font-size: 20px; /* Manji font dugmeta */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+    	    width: 150px; /* Automatska širina */
+        }
+
+	/* Stil za dugme Vrati se */
+	.back-button {
+    		position: absolute;
+    		top: 115px; /* Razdaljina od vrha, možete prilagoditi prema potrebama */
+    		left: 50px; /* Razdaljina od leve ivice */
+    		padding: 10px 25px; /* Manje dugme */
+    		font-size: 20px; /* Manji font dugmeta */
+    		background-color: #007BFF;
+    		color: white;
+    		border: none;
+    		cursor: pointer;
+    	        width: 150px; /* Automatska širina */
+	}
+
+	/* Stil za dugme Potvrda */
+	.napred-button {
+    		position: absolute;
+    		top: 181px; /* Razdaljina od vrha, možete prilagoditi prema potrebama */
+    		left: 50px; /* Razdaljina od leve ivice */
+    		padding: 10px 25px; /* Manje dugme */
+    		font-size: 20px; /* Manji font dugmeta */
+    		background-color: #FFA500;
+    		color: white;
+    		border: none;
+    		cursor: pointer;
+    	        width: 150px; /* Automatska širina */
+	}
+
+.back-button:hover {
+    background-color: #e53935;
+}
+
+.napred-button:hover {
+    background-color: #e53935;
+}
+
+        .print-button:hover {
+            background-color: #45a049;
+        }
+
+        /* CSS za štampanje */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .printable * {
+            visibility: visible;
+        }
+        .printable {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Dugme za štampanje -->
+    <button class="print-button" onclick="printContent()">Штампај</button>
+
+    <!-- Dugme za "Vrati se" -->
+    <button class="back-button" onclick="goBack()">Врати се</button>
+
+    <!-- Dugme za "Potvrda" -->
+    <button class="napred-button" onclick="napred()">Потврда</button>
+
+    <!-- Kontejner za sadržaj koji će biti štampan -->
+    <div class="printable">
+        <div class="image-container">
+            <img src="memorandum.jpg" alt="memorandum">
+            <img src="zahtev.jpg" alt="zahtev">
+            <img src="zahtev2.jpg" alt="zahtev2">
+        </div>
+
+<!-- Kontejner za Delovodni i Serijski broj -->
+<div class="info-container-del">
+    <div class="info-item-del">
+        <span id="деловодниБројValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+        <hr class="info-line-del"> <!-- Linija između vrednosti i labela -->
+        <label class="info-label-del">Деловодни број</label>
+    </div>
+</div>
+<div class="info-container-ser">
+    <div class="info-item-ser">
+        <span id="серијскиБројValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+        <hr class="info-line-ser"> <!-- Linija između vrednosti i labela -->
+        <label class="info-label-ser">Серијски број</label>
+    </div>
+</div>
+
+        <!-- Novi kontejner za dodatna polja -->
+        <div class="info-container-ime">
+            <div class="info-item-ime">
+                <span id="имеValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-ime">
+                <label class="info-label-ime">Име</label>
+            </div>
+</div>
+        <div class="info-container-prezime">
+            <div class="info-item-prezime">
+                <span id="презимеValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-prezime">
+                <label class="info-label-prezime">Презиме</label>
+            </div>
+</div>
+        <div class="info-container-adresa">
+            <div class="info-item-adresa">
+                <span id="адресаБоравкаValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-adresa">
+                <label class="info-label-adresa">Адреса боравка</label>
+            </div>
+</div>
+        <div class="info-container-mesto">
+            <div class="info-item-mesto">
+                <span id="местоБоравкаValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-mesto">
+                <label class="info-label-mesto">Место боравка</label>
+            </div>
+</div>
+        <div class="info-container-datumr">
+            <div class="info-item-datumr">
+                <span id="датумРођењаValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-datumr">
+                <label class="info-label-datumr">Датум рођења</label>
+            </div>
+</div>
+        <div class="info-container-mestor">
+            <div class="info-item-mestor">
+                <span id="местоРођењаValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-mestor">
+                <label class="info-label-mestor">Место рођења</label>
+            </div>
+</div>
+        <div class="info-container-jmbg">
+            <div class="info-item-jmbg">
+                <span id="јмбгValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-jmbg">
+                <label class="info-label-jmbg">ЈМБГ</label>
+            </div>
+</div>
+        <div class="info-container-telefon">
+            <div class="info-item-telefon">
+                <span id="телефонValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+                <hr class="info-line-telefon">
+                <label class="info-label-telefon">Телефон</label>
+            </div>
+        </div>
+
+<!-- Kontejner za Datum podnošenja zahteva i Potpis podnosioca zahteva -->
+   <div class="info-container-datump">
+    <div class="info-item-datump" style="flex: 1; text-align: left;">
+        <span id="датумПодношењаЗахтеваValue" style="font-size: 22px; font-weight: bold;"></span> <!-- Prikazivanje vrednosti -->
+        <hr class="info-line-datump">
+        <label class="info-label-datump">Датум подношења захтева</label>
+    </div>
+</div>
+   <div class="info-container-potpis">
+    <div class="info-item-potpis" style="flex: 1; text-align: right; margin-top: 25px;"> <!-- Pomeranje potpis -->
+        <hr class="info-line-potpis">
+        <label class="info-label-potpis">Потпис подносиоца захтева</label>
+    </div>
+</div>
+
+
+    <script>
+    // Funkcija koja otvara treći_index.html i čuva podatke u sessionStorage
+    function napred() {
+        // Preuzimanje vrednosti sa stranice (npr. iz input polja ili drugih elemenata)
+        const деловодниБрој = document.getElementById("деловодниБрој").value;
+        const серијскиБрој = document.getElementById("серијскиБрој").value;
+        const Име = document.getElementById("Име").value;
+        const презиме = document.getElementById("презиме").value;
+        const адресаБоравка = document.getElementById("адресаБоравка").value;
+        const местоБоравка = document.getElementById("местоБоравка").value;
+        const датумРођења = document.getElementById("датумРођења").value;
+        const местоРођења = document.getElementById("местоРођења").value;
+        const јмбг = document.getElementById("јмбг").value;
+        const телефон = document.getElementById("телефон").value;
+        const датумПодношењаЗахтева = document.getElementById("датумПодношењаЗахтева").value;
+
+        // Spremanje podataka u sessionStorage
+        sessionStorage.setItem("деловодниБрој", деловодниБрој);
+        sessionStorage.setItem("серијскиБрој", серијскиБрој);
+        sessionStorage.setItem("име", име);
+        sessionStorage.setItem("презиме", презиме);
+        sessionStorage.setItem("адресаБоравка", адресаБоравка);
+        sessionStorage.setItem("местоБоравка", местоБоравка);
+        sessionStorage.setItem("датумРођења", датумРођења);
+        sessionStorage.setItem("местоРођења", местоРођења);
+        sessionStorage.setItem("јмбг", јмбг);
+        sessionStorage.setItem("телефон", телефон);
+        sessionStorage.setItem("датумПодношењаЗахтева", датумПодношењаЗахтева);
+
+        // Navigacija ka trećoj stranici
+        window.location.href = "treci_index.html";
+    }
+	function printContent() {
+    	window.print(); // Pokreće štampanje sa stilovima za štampanje
+	}
+
+        // Funkcija koja otvara index.html kada se klikne dugme "Vrati se"
+        function goBack() {
+            window.location.href = "../index.html"; // Otvara index.html
+        }
+
+        function napred() {
+            window.location.href = "treci_index.html"; // Otvara index.html
+        }
+
+        window.onload = function() {
+            // Učitavanje podataka iz sessionStorage kao i prethodno
+        }
+
+// Dodajte ovaj kod u <script> tag
+window.onload = function() {
+    const деловодниБрој = sessionStorage.getItem("деловодниБрој");
+    const серијскиБрој = sessionStorage.getItem("серијскиБрој");
+    const име = sessionStorage.getItem("име");
+    const презиме = sessionStorage.getItem("презиме");
+    const адресаБоравка = sessionStorage.getItem("адресаБоравка");
+    const местоБоравка = sessionStorage.getItem("местоБоравка");
+    const датумРођења = sessionStorage.getItem("датумРођења");
+    const местоРођења = sessionStorage.getItem("местоРођења");
+    const јмбг = sessionStorage.getItem("јмбг");
+    const телефон = sessionStorage.getItem("телефон");
+    const датумПодношењаЗахтева = sessionStorage.getItem("датумПодношењаЗахтева");
+
+    // Provera u konzoli
+    console.log('Деловодни број:', деловодниБрој);  // Trebalo bi da ispiše: 123456
+    console.log('Серијски број:', серијскиБрој);    // Trebalo bi da ispiše: 987654
+    console.log('Име:', име);    // Trebalo bi da ispiše: 987654
+    console.log('Презиме:', презиме);    //
+    console.log('Адреса боравка:', адресаБоравка);    //
+    console.log('Место боравка:', местоБоравка);    //
+    console.log('Датум рођења:', датумРођења);    //
+    console.log('Место рођења:', местоРођења);    //
+    console.log('ЈМБГ:', јмбг);    //
+    console.log('Телефон:', телефон);    //
+    console.log('Датум подношења захтева:', датумПодношењаЗахтева);    //
+
+    if (деловодниБрој) {
+        const деловодниБројElement = document.querySelector("#деловодниБројValue");
+        if (деловодниБројElement) {
+            деловодниБројElement.textContent = деловодниБрој;
+        }
+    }
+
+    if (серијскиБрој) {
+        const серијскиБројElement = document.querySelector("#серијскиБројValue");
+        if (серијскиБројElement) {
+            серијскиБројElement.textContent = серијскиБрој;
+        }
+    }
+
+    if (име) {
+        const имеElement = document.querySelector("#имеValue");
+        if (имеElement) {
+            имеElement.textContent = име;
+        }
+    }
+
+    if (презиме) {
+        const презимеElement = document.querySelector("#презимеValue");
+        if (презимеElement) {
+            презимеElement.textContent = презиме;
+        }
+    }
+
+    if (адресаБоравка) {
+        const адресаБоравкаElement = document.querySelector("#адресаБоравкаValue");
+        if (адресаБоравкаElement) {
+            адресаБоравкаElement.textContent = адресаБоравка;
+        }
+    }
+    if (местоБоравка) {
+        const местоБоравкаElement = document.querySelector("#местоБоравкаValue");
+        if (местоБоравкаElement) {
+            местоБоравкаElement.textContent = местоБоравка;
+        }
+    }
+    if (датумРођења) {
+        const датумРођењаElement = document.querySelector("#датумРођењаValue");
+        if (датумРођењаElement) {
+            датумРођењаElement.textContent = датумРођења;
+        }
+    }
+
+    if (местоРођења) {
+        const местоРођењаElement = document.querySelector("#местоРођењаValue");
+        if (местоРођењаElement) {
+            местоРођењаElement.textContent = местоРођења;
+        }
+    }
+
+    if (јмбг) {
+        const јмбгElement = document.querySelector("#јмбгValue");
+        if (јмбгElement) {
+            јмбгElement.textContent = јмбг;
+        }
+    }
+
+    if (телефон) {
+        const телефонElement = document.querySelector("#телефонValue");
+        if (телефонElement) {
+            телефонElement.textContent = телефон;
+        }
+    }
+
+    if (датумПодношењаЗахтева) {
+        const датумПодношењаЗахтеваElement = document.querySelector("#датумПодношењаЗахтеваValue");
+        if (датумПодношењаЗахтеваElement) {
+            датумПодношењаЗахтеваElement.textContent = датумПодношењаЗахтева;
+        }
+    }
+};
+    </script>
+
+</body>
+</html>
