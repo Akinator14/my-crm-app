@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Aplikacija</title>
+
+    <!-- Dodavanje SheetJS biblioteke -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+    <style>
+        /* Generalni stilovi za telo stranice */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0 20px; /* Dodan padding na body */
+            box-sizing: border-box; /* Osigurava da padding ne utiče na širinu */
+        }
+
+        /* Glavni kontejner */
+        .main-content {
+            width: 100%;
+            min-width: 100%; /* Obezbeđuje da pozadina bude širine ekrana */
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box; /* Osigurava da padding ne utiče na širinu */
+        }
+
+        /* Naslov */
+        h1, h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Forma */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Tabela */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Dugme za izvoz */
+        #exportButton {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #exportButton:hover {
+            background-color: #1976D2;
+        }
+.request-button {
+    background-color: #4CAF50; /* Zelena */
+}
+
+.request-button:hover {
+    background-color: #45a049;
+}
+
+.edit-button {
+    background-color: #f39c12; /* Narandžasta */
+}
+
+.edit-button:hover {
+    background-color: #e67e22;
+}
+
+
+    </style>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+
+        // Firebase konfiguracija
+        const firebaseConfig = {
+            apiKey: "AIzaSyCuVIHvTSt92dd7OzNVsq6qaWjRq3-s4vo",
+            authDomain: "crm-app-dd780.firebaseapp.com",
+            projectId: "crm-app-dd780",
+            storageBucket: "crm-app-dd780.appspot.com",
+            messagingSenderId: "843950811494",
+            appId: "1:843950811494:web:d6f9edbbc2eed70a8900a7",
+            measurementId: "G-2Z2LWB6QPT"
+        };
+
+        // Inicijalizacija Firebase-a
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Funkcija za dodavanje novog klijenta u Firestore
+        async function addClient(name, surname,dateb, place, jmbg, adress, placea, city, post, dnum, snum, lnum, email, phone, datez) {
+            try {
+                // Dodaj klijenta u Firestore kolekciju
+                await addDoc(collection(db, "clients"), {
+                    name: name,
+                    surname: surname,
+                    dateb: dateb,
+                    place: place,
+                    jmbg: jmbg,
+                    adress: adress,
+                    placea: placea,
+                    city: city,
+                    post: post,
+                    dnum: dnum,
+                    snum: snum,
+                    lnum: lnum,
+                    email: email,
+                    phone: phone,
+                    datez: datez
+                });
+                console.log("Klijent je uspešno dodat u Firestore!");
+            } catch (error) {
+                console.error("Greška pri dodavanju klijenta:", error);
+            }
+        }
+
+// Funkcija za učitavanje klijenata iz Firestore-a i sortiranje po prvom delu dnum pre "/"
+async function loadclients() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "clients"));
+        let table = document.querySelector("tbody");
+        table.innerHTML = ""; // Briše staru tabelu
+
+        let clients = [];
+        querySnapshot.forEach((doc) => {
+            let client = doc.data();
+            client.id = doc.id; // Dodaj ID dokumenta u objekat
+            clients.push(client);
+        });
+
+        // Sortiranje samo po prvom delu pre "/"
+        clients.sort((a, b) => {
+            let numA = a.dnum.includes('/') ? Number(a.dnum.split('/')[0]) : 0; // Ako nema "/", stavljamo 0
+            let numB = b.dnum.includes('/') ? Number(b.dnum.split('/')[0]) : 0;
+            return numA - numB; // Sortiranje po broju
+        });
+
+        // Dodavanje sortiranih podataka u tabelu
+        clients.forEach((client) => {
+            let newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td>${client.name}</td>
+                <td>${client.surname}</td>
+                <td>${client.dateb}</td>
+                <td>${client.place}</td>
+                <td>${client.jmbg}</td>
+                <td>${client.adress}</td>
+                <td>${client.placea}</td>
+                <td>${client.city}</td>
+                <td>${client.post}</td>
+                <td>${client.dnum}</td>
+                <td>${client.snum}</td>
+                <td>${client.lnum}</td>
+                <td>${client.email}</td>
+                <td>${client.phone}</td>
+                <td>${client.datez}</td>
+                <td><button class="request-button" data-id="${client.id}">Захтев</button></td>
+                <td><button class="edit-button" data-id="${client.id}">Измени</button></td>
+            `;
+        });
+
+        // Funkcija za čuvanje podataka u sessionStorage
+        function saveClientData(button) {
+            const row = button.closest("tr"); // Pomerite ovu liniju da bude samo jednom
+
+            const clientId = button.getAttribute("data-id");
+            const деловодниБрој = row.cells[9].textContent; // Uzimamo delovodni broj sa pozicije 10 (index 9)
+            const серијскиБрој = row.cells[10].textContent; // Uzimamo serijski broj sa pozicije 11 (index 10)
+            const име = row.cells[0].textContent; // Uzimamo ime sa pozicije 1 (index 0)
+            const презиме = row.cells[1].textContent; // Uzimamo prezime sa pozicije 2 (index 1)
+            const адресаБоравка = row.cells[5].textContent; // Uzimamo adresu boravka sa pozicije 6 (index 5)
+            const местоБоравка = row.cells[6].textContent; // Uzimamo mesto boravka sa pozicije 7 (index 6)
+            const датумРођења = row.cells[2].textContent; // Uzimamo datum rođenja sa pozicije 3 (index 2)
+            const местоРођења = row.cells[3].textContent; // Uzimamo mesto rođenja sa pozicije 4 (index 3)
+            const јмбг = row.cells[4].textContent; // Uzimamo jmbg sa pozicije 5 (index 4)
+            const телефон = row.cells[13].textContent; // Uzimamo telefon sa pozicije 14 (index 13)
+            const датумПодношењаЗахтева = row.cells[14].textContent; // Uzimamo datum pd. sa pozicije 15 (index 14)
+            const општина = row.cells[7].textContent; // Uzimamo datum pd. sa pozicije 8 (index 7)
+            const поштанскиБрој = row.cells[8].textContent; // Uzimamo datum pd. sa pozicije 9 (index 8)
+            const бројЛК = row.cells[11].textContent; // Uzimamo datum pd. sa pozicije 12 (index 11)
+            const епошта = row.cells[12].textContent; // Uzimamo datum pd. sa pozicije 13 (index 12)
+
+            sessionStorage.setItem("clientId", clientId);
+            sessionStorage.setItem("деловодниБрој", деловодниБрој);
+            sessionStorage.setItem("серијскиБрој", серијскиБрој);
+            sessionStorage.setItem("име", име);
+            sessionStorage.setItem("презиме", презиме);
+            sessionStorage.setItem("адресаБоравка", адресаБоравка);
+            sessionStorage.setItem("местоБоравка", местоБоравка);
+            sessionStorage.setItem("датумРођења", датумРођења);
+            sessionStorage.setItem("местоРођења", местоРођења);
+            sessionStorage.setItem("јмбг", јмбг);
+            sessionStorage.setItem("телефон", телефон);
+            sessionStorage.setItem("датумПодношењаЗахтева", датумПодношењаЗахтева);
+            sessionStorage.setItem("општина", општина);
+            sessionStorage.setItem("поштанскиБрој", поштанскиБрој);
+            sessionStorage.setItem("бројЛК", бројЛК);
+            sessionStorage.setItem("епошта", епошта);
+        }
+
+        // Dodaj event listenere za dugmad "Izmeni"
+        document.querySelectorAll(".edit-button").forEach((button) => {
+            button.addEventListener("click", () => {
+                saveClientData(button);
+                window.location.href = "assets/index_2.html";
+            });
+        });
+
+        // Dodaj event listenere za dugmad "Zahtev"
+        document.querySelectorAll(".request-button").forEach((button) => {
+            button.addEventListener("click", () => {
+                saveClientData(button);
+                window.location.href = "assets/drugi_index.html";
+            });
+        });
+
+    } catch (error) {
+        console.error("Greška pri učitavanju klijenata:", error);
+    }
+}
+
+
+
+// Funkcija za izvoz podataka u CSV
+function exportToCSV() {
+    let csvContent = "\uFEFFИме,Презиме,Датум рођења,Место рођења,ЈМБГ,Адреса боравка,Место боравка,Општина,Поштански број,Деловодни број,Серијски број,Број Л.К.,Е-пошта,Телефон,Датум подношења захтева\n"; // Zaglavlja kolona
+
+    const tableRows = document.querySelectorAll("tbody tr");
+    tableRows.forEach(row => {
+        const columns = row.querySelectorAll("td");
+        const rowData = [];
+        columns.forEach((col, index) => {
+            let cellData = col.textContent.trim();
+            
+            // Ako je JMBG (indeks 4) ili Dеловодни број (indeks 9), dodaj ="..." da se prikaže ispravno
+            if (index === 4 || index === 9 || index === 13) { 
+                cellData = `="${cellData}"`;
+            }
+
+            rowData.push(cellData);
+        });
+        csvContent += rowData.join(",") + "\n";
+    });
+
+    // Kreiraj Blob za preuzimanje sa UTF-8 kodiranjem
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "klijenti.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+        // Učitavanje klijenata kada se stranica učita
+        window.onload = loadclients;
+
+        // Rukovanje formom za dodavanje novog klijenta
+        document.getElementById("addClientForm").addEventListener("submit", async function(event) {
+            event.preventDefault();  // Sprečava osvežavanje stranice prilikom submit-a
+
+            let name = document.getElementById("name").value;
+            let surname = document.getElementById("surname").value;
+            let dateb = document.getElementById("dateb").value;
+            let place = document.getElementById("place").value;
+            let jmbg = document.getElementById("jmbg").value;
+            let adress = document.getElementById("adress").value;
+            let placea = document.getElementById("placea").value;
+            let city = document.getElementById("city").value;
+            let post = document.getElementById("post").value;
+            let dnum = document.getElementById("dnum").value;
+            let snum = document.getElementById("snum").value;
+            let lnum = document.getElementById("lnum").value;
+            let email = document.getElementById("email").value;
+            let phone = document.getElementById("phone").value;
+            let datez = document.getElementById("datez").value;
+
+            // Dodavanje klijenta u Firestore
+            await addClient(name, surname, dateb, place, jmbg, adress, placea, city, post, dnum, snum, lnum, email, phone, datez);
+
+            // Resetovanje forme
+            document.getElementById("addClientForm").reset();
+
+            // Ponovno učitaj klijente
+            loadclients();
+        });
+
+        // Dodavanje funkcionalnosti za izvoz u CSV
+        document.getElementById("exportButton").addEventListener("click", exportToCSV);
+    </script>
+</head>
+<body>
+    <div class="main-content">
+        <h2>Додај новог клијента</h2>
+        <form id="addClientForm">
+            <input type="text" id="name" placeholder="Име" required>
+            <input type="text" id="surname" placeholder="Презиме" required>
+            <input type="text" id="dateb" placeholder="Датум рођења" required>
+            <input type="text" id="place" placeholder="Место рођења" required>
+            <input type="text" id="jmbg" placeholder="ЈМБГ" required>
+            <input type="text" id="adress" placeholder="Адреса боравка" required>
+            <input type="text" id="placea" placeholder="Место боравка" required>
+            <input type="text" id="city" placeholder="Општина" required>
+            <input type="text" id="post" placeholder="Поштански број" required>
+            <input type="text" id="dnum" placeholder="Деловодни број" required>
+            <input type="text" id="snum" placeholder="Серијски број" required>
+            <input type="text" id="lnum" placeholder="Број Л.К." required>
+            <input type="text" id="email" placeholder="Е-пошта" required>
+            <input type="text" id="phone" placeholder="Телефон" required>
+            <input type="text" id="datez" placeholder="Датум подношења захтева" required>
+            <button type="submit">Додај клијента</button>
+        </form>
+
+        <h1>Листа клијената</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Име</th>
+                    <th>Презиме</th>
+                    <th>Датум рођења</th>
+                    <th>Место рођења</th>
+                    <th>ЈМБГ</th>
+                    <th>Адреса боравка</th>
+                    <th>Место боравка</th>
+                    <th>Општина</th>
+                    <th>Поштански број</th>
+                    <th>Деловодни број</th>
+                    <th>Серијски број</th>
+                    <th>Број Л.К.</th>
+                    <th>Е-пошта</th>
+                    <th>Телефон</th>
+                    <th>Датум подношења захтева</th>
+                    <th>Захтев</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Klijenti će se ovde prikazivati -->
+            </tbody>
+        </table>
+
+        <!-- Dugme za izvoz u CSV -->
+        <button id="exportButton">Извези табелу</button>
+
+    </div>
+    <script>
+        // Funkcija koja filtrira tabelu
+        function filterclients() {
+            // Prikupljanje vrednosti iz polja forme
+            let nameFilter = document.getElementById("name").value.toLowerCase();
+            let surnameFilter = document.getElementById("surname").value.toLowerCase();
+            let datebFilter = document.getElementById("dateb").value.toLowerCase();
+            let placeFilter = document.getElementById("place").value.toLowerCase();
+            let jmbgFilter = document.getElementById("jmbg").value.toLowerCase();
+            let adressFilter = document.getElementById("adress").value.toLowerCase();
+            let placeaFilter = document.getElementById("placea").value.toLowerCase();
+            let cityFilter = document.getElementById("city").value.toLowerCase();
+            let postFilter = document.getElementById("post").value.toLowerCase();
+            let dnumFilter = document.getElementById("dnum").value.toLowerCase();
+            let snumFilter = document.getElementById("snum").value.toLowerCase();
+            let lnumFilter = document.getElementById("lnum").value.toLowerCase();
+            let emailFilter = document.getElementById("email").value.toLowerCase();
+            let phoneFilter = document.getElementById("phone").value.toLowerCase();
+            let datezFilter = document.getElementById("datez").value.toLowerCase();
+
+            let tableRows = document.querySelectorAll("tbody tr");
+
+            tableRows.forEach(row => {
+                // Ispisivanje vrednosti iz ćelija za svaki red
+                let nameCell = row.cells[0].textContent.toLowerCase();
+                let surnameCell = row.cells[1].textContent.toLowerCase();
+                let datebCell = row.cells[2].textContent.toLowerCase();
+                let placeCell = row.cells[3].textContent.toLowerCase();
+                let jmbgCell = row.cells[4].textContent.toLowerCase();
+                let adressCell = row.cells[5].textContent.toLowerCase();
+                let placeaCell = row.cells[6].textContent.toLowerCase();
+                let cityCell = row.cells[7].textContent.toLowerCase();
+                let postCell = row.cells[8].textContent.toLowerCase();
+                let dnumCell = row.cells[9].textContent.toLowerCase();
+                let snumCell = row.cells[10].textContent.toLowerCase();
+                let lnumCell = row.cells[11].textContent.toLowerCase();
+                let emailCell = row.cells[12].textContent.toLowerCase();
+                let phoneCell = row.cells[13].textContent.toLowerCase();
+                let datezCell = row.cells[14].textContent.toLowerCase();
+
+                // Filtriranje na osnovu vrednosti u svim poljima forme
+                if (
+                    nameCell.includes(nameFilter) &&
+                    surnameCell.includes(surnameFilter) &&
+                    datebCell.includes(datebFilter) &&
+                    placeCell.includes(placeFilter) &&
+                    jmbgCell.includes(jmbgFilter) &&
+                    adressCell.includes(adressFilter) &&
+                    placeaCell.includes(placeaFilter) &&
+                    cityCell.includes(cityFilter) &&
+                    postCell.includes(postFilter) &&
+                    dnumCell.includes(dnumFilter) &&
+                    snumCell.includes(snumFilter) &&
+                    lnumCell.includes(lnumFilter) &&
+                    emailCell.includes(emailFilter) &&
+                    phoneCell.includes(phoneFilter) &&
+                    datezCell.includes(datezFilter)
+                ) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        // Event listener za sva polja forme koji poziva filter kada korisnik kuca
+        const formInputs = document.querySelectorAll("form input");
+        formInputs.forEach(input => {
+            input.addEventListener("input", filterclients);
+        });
+    </script>
+
+</body>
+</html>
